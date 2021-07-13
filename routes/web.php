@@ -24,6 +24,11 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/auth/init', function () {
+    Inertia::setRootView('main');
+    return Inertia::render('Auth/Init');
+});
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
