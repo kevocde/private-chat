@@ -14,13 +14,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/main.css') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
     <!-- Scripts -->
     @routes
-    <script src="{{ mix('js/main.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased bg-gray-100 h-screen">
     @inertia
 </body>
 </html>

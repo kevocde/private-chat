@@ -1,64 +1,28 @@
 <template>
-    <jet-authentication-card>
-        <template #logo>
-            <jet-authentication-card-logo />
-        </template>
-
-        <jet-validation-errors class="mb-4" />
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
+    <div class="min-h-screen flex justify-center items-center">
+        <div class="bg-white w-auto h-auto rounded-md shadow px-2 py-5">
+            <div class="login__header text-center">
+                <h1 class="text-3xl text-gray-500 mb-2">Private Chat</h1>
+                <p class="text-gray-400">Please scan your QR code to restore the session or init a new session</p>
+            </div>
+            <div class="login__reader flex justify-center p-5">
+                <div class="login__reader__component w-3/4 rounded-md overflow-hidden border-4 border-indigo-300">
+                    <qrcode-stream :camera="cameraStatus" @init="qrInit" @decode="qrDecoded"></qrcode-stream>
+                </div>
+            </div>
+            <div class="login__controls text-center">
+                <button class="bg-indigo-500 text-center py-3 px-4 rounded-md text-sm text-white hover:bg-indigo-600">New Session</button>
+            </div>
         </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <jet-label for="email" value="Email" />
-                <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autofocus />
-            </div>
-
-            <div class="mt-4">
-                <jet-label for="password" value="Password" />
-                <jet-input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="current-password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <jet-checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <inertia-link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Forgot your password?
-                </inertia-link>
-
-                <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </jet-button>
-            </div>
-        </form>
-    </jet-authentication-card>
+    </div>
 </template>
 
 <script>
-    import JetAuthenticationCard from '@/Jetstream/AuthenticationCard'
-    import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo'
-    import JetButton from '@/Jetstream/Button'
-    import JetInput from '@/Jetstream/Input'
-    import JetCheckbox from '@/Jetstream/Checkbox'
-    import JetLabel from '@/Jetstream/Label'
-    import JetValidationErrors from '@/Jetstream/ValidationErrors'
+    import { QrcodeStream } from 'vue3-qrcode-reader'
 
     export default {
         components: {
-            JetAuthenticationCard,
-            JetAuthenticationCardLogo,
-            JetButton,
-            JetInput,
-            JetCheckbox,
-            JetLabel,
-            JetValidationErrors
+            QrcodeStream
         },
 
         props: {
@@ -72,7 +36,8 @@
                     email: '',
                     password: '',
                     remember: false
-                })
+                }),
+                cameraStatus: 'auto'
             }
         },
 
@@ -86,6 +51,17 @@
                     .post(this.route('login'), {
                         onFinish: () => this.form.reset('password'),
                     })
+            },
+            /**
+             * Método para el control del lector QR
+             */
+            async qrInit(promise) {
+                await promise
+            },
+            async qrDecoded(value) {
+                this.cameraStatus = 'off'
+                console.log(value)
+                window.setTimeout(() => { this.cameraStatus = 'auto' }, 500)
             }
         }
     }

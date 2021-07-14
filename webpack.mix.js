@@ -18,13 +18,6 @@ mix.js('resources/js/app.js', 'public/js').vue()
     ])
     .webpackConfig(require('./webpack.config'));
 
-mix.js('resources/js/Clean/main', 'public/js').vue()
-    .postCss('resources/css/main.css', 'public/css', [
-        require('postcss-import'),
-        require('tailwindcss')
-    ])
-    .webpackConfig(require('./webpack.config'));
-
 if (mix.inProduction()) {
     mix.version();
 }
