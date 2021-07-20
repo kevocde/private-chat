@@ -2,14 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * Class User
+ * @package App\Models
+ *
+ * @property String $username
+ * @property String $death_time
+ * @property String $token
+ * @property String $qr_image
+ * @property String $created_at
+ * @property String $updated_at
+ * @property String $deleted_at
+ */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasTimestamps, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -17,9 +30,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'username',
+        'death_time',
+        'token',
+        'qr_image',
     ];
 
     /**
@@ -28,8 +42,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     /**
@@ -38,6 +53,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'death_time' => 'datetime',
     ];
 }
