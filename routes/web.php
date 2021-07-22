@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SecurityController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('auth/login', function () {
-    return Inertia::render('Auth/Login');
+Route::group(['prefix' => 'security', 'as' => 'security.'], function() {
+    Route::get('login', [SecurityController::class, 'login'])->name('login');
+    Route::post('login', [SecurityController::class, 'doLogin'])->name('doLogin');
+});
+
+Route::middleware('auth')->group(function() {
+    Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 });

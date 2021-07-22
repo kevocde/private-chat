@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 /**
  * Class User
@@ -19,11 +22,20 @@ use Illuminate\Notifications\Notifiable;
  * @property String $created_at
  * @property String $updated_at
  * @property String $deleted_at
+ * @property Participant[] $participants
  */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasTimestamps, SoftDeletes;
 
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'integer';
+
+    protected $table = 'guests';
     /**
      * The attributes that are mass assignable.
      *
@@ -31,7 +43,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username',
-        'death_time',
+        'death_date',
         'token',
         'qr_image',
     ];
@@ -55,4 +67,30 @@ class User extends Authenticatable
     protected $casts = [
         'death_time' => 'datetime',
     ];
+
+    /**
+     * @return HasMany
+     */
+    public function participants(): HasMany
+    {
+        return $this->hasMany('App\Models\Participant');
+    }
+
+    /**
+     * Crear un nuevo invitado basado en el nombre de usuario pasado
+     * @param string $username
+     * @return User
+     * @throws Exception
+     */
+    public static function createNewGuest(string $username): User
+    {
+        if (empty($username)) throw new Exception("The username can't be empty");
+        if (User::where('username', $username)->count() > 0) throw new Exception('The username has been taken');
+
+        return User::create([
+            'username' => $username,
+            'death_date' => date('Y-m-d H:i:s', strtotime(date('now') . ' +7 days')),
+            'token' => Str::uuid()
+        ]);
+    }
 }
