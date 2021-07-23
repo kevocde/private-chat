@@ -16,16 +16,14 @@ use Inertia\Response;
 
 final class SecurityController extends Controller
 {
-    public function __construct()
-    {
-        Inertia::setRootView('layouts.login');
-    }
 
     /**
      * @return RedirectResponse|Response
      */
     public function login()
     {
+        Inertia::setRootView('layouts.login');
+
         if (! Auth::guest()) return redirect()->route('dashboard');
         else {
             return Inertia::render('Auth/Login', [
@@ -40,6 +38,8 @@ final class SecurityController extends Controller
      */
     public function doLogin(Request $request)
     {
+        Inertia::setRootView('layouts.login');
+
         try {
             $request->validate([
                 'newSession' => 'required',
