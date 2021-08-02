@@ -26,3 +26,11 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/**
+ * Importación e inicialización de librerías de íconos
+ */
+window.feather = require('feather-icons/dist/feather.min')
+document.addEventListener('DOMContentLoaded', () => {
+    window.feather.replace()
+})
