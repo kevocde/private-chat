@@ -6,22 +6,28 @@
                 <li class="header__navigator__list__item"><a href="">Configurations</a></li>
             </ul>
         </nav>
+        <NotificationViewer />
+        <Profile />
     </div>
 </template>
 
 <script>
+import Profile from "~/Components/Profile";
+import NotificationViewer from "~/Components/NotificationViewer";
+
 export default {
-    name: "Header"
+    name: "Header",
+    components: {Profile, NotificationViewer}
 }
 </script>
 
 <style lang="postcss" scoped>
     .header-component-container {
-        @apply bg-white h-16;
+        @apply bg-white h-16 flex justify-between;
     }
 
     .header__navigator {
-        @apply col-span-4 h-full px-4;
+        @apply h-full px-4 flex-1;
     }
 
     .header__navigator__list {
@@ -29,7 +35,7 @@ export default {
     }
 
     .header__navigator__list__item {
-        @apply flex items-center px-4 transition transition duration-200 ease-in-out font-semibold text-gray-500 border-b-2 border-transparent hover:border-indigo-500;
+        @apply flex items-center px-4 transition duration-200 ease-in-out font-semibold text-sm text-gray-500 border-b-2 border-transparent hover:border-indigo-500;
     }
 
     .header__navigator__list__item.active {

@@ -24,6 +24,6 @@ Route::group(['prefix' => 'security', 'as' => 'security.'], function() {
     Route::post('login', [SecurityController::class, 'doLogin'])->name('doLogin');
 });
 
+Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 Route::middleware('auth')->group(function() {
-    Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 });
